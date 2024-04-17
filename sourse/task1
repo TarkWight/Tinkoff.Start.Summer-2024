@@ -1,0 +1,35 @@
+import Foundation
+
+func findMaxFives(_ n: Int, _ grades: [Int]) -> Int {
+    var maxFives = 0
+    var currentFives = 0
+    var windowStart = 0
+    
+    for windowEnd in 0..<n {
+        if grades[windowEnd] == 5 {
+            currentFives += 1
+        }
+        
+        if windowEnd - windowStart + 1 > 7 {
+            if grades.indices.contains(windowStart) && grades[windowStart] == 5 {
+                currentFives -= 1
+            }
+            windowStart += 1
+        }
+        
+        if windowEnd - windowStart + 1 == 7 && !grades[windowStart...windowEnd].contains(2) && !grades[windowStart...windowEnd].contains(3) {
+            maxFives = max(maxFives, currentFives)
+        }
+    }
+    
+    return maxFives == 0 ? -1 : maxFives
+}
+
+if let n = readLine(), let count = Int(n) {
+    if let gradesString = readLine() {
+        let grades = gradesString.split(separator: " ").compactMap { Int($0) }
+        
+        let result = findMaxFives(count, grades)
+        print(result)
+    }
+}
